@@ -10,3 +10,5 @@ const Messages = (props) => {
     </View>
   )
 }
+
+export default Messages

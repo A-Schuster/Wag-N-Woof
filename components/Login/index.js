@@ -10,3 +10,5 @@ const Login = (props) => {
     </View>
   )
 }
+
+export default Login
