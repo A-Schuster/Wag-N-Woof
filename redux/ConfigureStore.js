@@ -8,6 +8,8 @@ export const ConfigureStore = () => {
   const store = createStore(
     combineReducers({
       ...createForms({
+        userCreationForm: InitialUser,
+        dogCreationForm: InitialDog,
       })
     }),
     applyMiddleware(thunk, logger)
