@@ -4,3 +4,4 @@ export const ADD_MESSAGE = "ADD_MESSAGE";
 export const FETCHED_USERS = "FETCHED_USERS";
 export const FETCHING_USERS = "FETCHING_USERS";
 export const USERS_FAILED = 'USERS_FAILED';
+export const SEARCHING_USERS = "SEARCHING_USERS"

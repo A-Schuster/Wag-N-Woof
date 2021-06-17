@@ -1,24 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux'
-import { View, Text, FlatList } from 'react-native'
-
-const renderUsers = (item) => {
-  alert(item)
-  return (
-    <Text>{item.firstName}</Text>
-  )
-}
+import { View, Text} from 'react-native'
 
 
 export const Home = () => {
-  const users = useSelector(state => state.users)
-  console.log(users)
   return(
-    <View>
-      <FlatList 
-        data={users.users}
-        renderItem={item => renderUsers(item)}
-      />
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <Text>
+        Home
+      </Text>
     </View>
   )
 }
