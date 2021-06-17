@@ -23,15 +23,18 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
     "react-native-web": "~0.13.12",
+    "react-navigation": "^4.4.4",
     "react-navigation-drawer": "^2.7.1",
     "react-navigation-stack": "^1.10.3",
+    "react-redux": "^7.2.4",
     "react-redux-form": "1.16.14",
     "redux": "^4.1.0",
     "redux-logger": "3.0.6",
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "react-devtools": "^4.13.5"
   },
   "private": true
 }

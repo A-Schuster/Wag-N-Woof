@@ -1,9 +1,14 @@
 import React from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
+import { Provider } from 'react-redux'
+import Main from './components/Main'
+import { ConfigureStore } from './redux/ConfigureStore'
 
-const store = createStore(applyMiddleware(thunk))
+const store = ConfigureStore()
 
 export default function App() {
-  return <Main/>
+  return(
+    <Provider store={store}>
+      <Main/>
+    </Provider>
+  )
 }
