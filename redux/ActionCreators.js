@@ -42,11 +42,24 @@ export const verifyUser = user => (dispatch,getState) => {
   const users = getState().users.users
   const filtered = users.filter(indUser => user.username === indUser.username && user.password === indUser.password)
   if(filtered.length === 1){
-    console.log(filtered[0])
+    dispatch(setCurrentUser(filtered[0]))
   }
- 
+  else{
+    const error = new Error('User was either not found or incorrect password.')
+    throw error
+  }
 }
+
+export const logoutUser = () => ({
+  type: ActionTypes.USER_LOGOUT,
+  payload: {}
+})
 
 export const searchingUsers = () => ({
   type: ActionTypes.SEARCHING_USERS
+})
+
+export const setCurrentUser = (user) => ({
+  type: ActionTypes.SET_CURRENT_USER,
+  payload: user
 })

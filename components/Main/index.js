@@ -1,6 +1,6 @@
 import React from "react"
-import { useDispatch } from "react-redux";
-import { View, Platform } from "react-native"
+import { useDispatch,useSelector } from "react-redux";
+import { View, Platform, Text } from "react-native"
 import { NavigationContainer } from '@react-navigation/native';
 import Login from "../Login";
 import Constants from "expo-constants";
@@ -8,7 +8,7 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from 'react-navigation';
 import { Home } from "../Home";
-import { fetchUsers, verifyUser } from "../../redux/ActionCreators";
+import { fetchUsers, logoutUser, } from "../../redux/ActionCreators";
 import SignUp from "../SignUp";
 
 const HomeNavigator = createStackNavigator(
@@ -62,20 +62,27 @@ export const Main = () => {
 
   const dispatch = useDispatch()
   dispatch(fetchUsers())
+  const user = useSelector(state => state.user.user)
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
+  }
   
-  const isLogged = false
+  const isLogged = user.username ? true : false
 
   return(
     <View style={{
       flex: 1,
       paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight
       }}>
-      <>
         {!isLogged && <LoginNavigator/>}
-      </>
-      <>
-        {isLogged && <AppNavigator/>}
-      </>
+        {
+          isLogged && 
+          <>
+            <Text onPress={handleLogout}>LOGOUT</Text>
+            <AppNavigator />
+          </>
+        }
     </View>
   )
 }
