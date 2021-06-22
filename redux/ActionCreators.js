@@ -46,7 +46,7 @@ export const verifyUser = user => (dispatch,getState) => {
   }
   else{
     const error = new Error('User was either not found or incorrect password.')
-    throw error
+    alert(error)
   }
 }
 

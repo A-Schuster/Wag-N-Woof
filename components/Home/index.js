@@ -7,9 +7,12 @@ import Messages from '../Messages';
 
 
 export const Home = () => {
+
   return(
     <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-      <Messages/>
+      <Text>
+        Home
+      </Text>
     </View>
   )
 }
