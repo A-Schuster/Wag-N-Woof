@@ -63,3 +63,29 @@ export const setCurrentUser = (user) => ({
   type: ActionTypes.SET_CURRENT_USER,
   payload: user
 })
+
+export const postMessageToUser = (message,user,toUser) => (dispatch) => {
+  console.log(...user.messages.filter(message => message.from === toUser.username))
+  // return fetch(baseUrl + 'users/' + user.id + "messages/" + "from/" + toUser.id,{
+  //   method: "PATCH",
+  //   body: JSON.stringify({
+  //     conversation: [...user.messages.filter(message => message.from === toUser.username)[0].conversation, message]
+  //   }),
+  //   headers:{
+  //     "Content-type": "application/json"
+  //   }
+  // })
+  // .then(response => console.log(JSON.stringify(response)))
+}
+
+export const postMessage = (message,toUser) => (dispatch,getState) => {
+  // console.log(...getState().user.user.messages)
+  dispatch(postMessageToUser(message,getState().user.user,toUser))
+  .then(response => dispatch(postMessageToUser(message,getState().user.user,toUser)))
+  
+}
+
+export const addMessage = (message) => dispatch => ({
+  type: ActionTypes.ADD_MESSAGE,
+  payload: message
+})

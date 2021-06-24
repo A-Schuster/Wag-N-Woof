@@ -5,12 +5,12 @@ import { ListItem } from "react-native-elements"
 const Messages = ({user,users,navigation}) => {
 
   const latestMessage = (conversation) => {
-    const sorted  = conversation.received.sort((a,b) => {
+    const sorted  = conversation.sort((a,b) => {
       if(a.info.date > b.info.date){
-        return 1
+        return -1
       }
       else if(b.info.date > a.info.date){
-        return -1
+        return 1
       }
       else{
         return 0
@@ -28,10 +28,9 @@ const Messages = ({user,users,navigation}) => {
   const MessageComponent = ({item}) => {
     const fromUser = getFromUser(item.from)
     const mostRecentMessage = latestMessage(item.conversation)
-    // console.log(`From User: ${JSON.stringify(latestMessage(item.conversation))}`)
     return(
       <ListItem onPress={() => navigation.navigate('Conversation', { fromUser: fromUser, conversation: item.conversation}) }>
-        <ListItem.Title>{fromUser.username}</ListItem.Title>
+        <ListItem.Title>{item.from}</ListItem.Title>
         <ListItem.Subtitle>{mostRecentMessage.info.content}</ListItem.Subtitle>
       </ListItem>
     )

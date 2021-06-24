@@ -33,27 +33,10 @@ const MessagesStack = ({user,users}) => {
   return(
     <Stack.Navigator>
       <Stack.Screen options={{headerShown: false}}  name={"Messages"} component={({navigation}) => <Messages navigation={navigation} users={users} user={user}/>} />
-      <Stack.Screen name={"Conversation"} component={Conversation} />
+      <Stack.Screen name={"Conversation"} options={({ route }) => ({ title: route.params.fromUser.username.toUpperCase()})} component={Conversation} />
     </Stack.Navigator>
   )
 }
-  
-//   {
-//     Messages: { screen: Messages},
-//     Conversation: { screen: Conversation},
-//   },
-//   {
-//     defaultNavigationOptions: {
-//       headerStyle: {
-//         backgroundColor: 'lightblue'
-//       },
-//       headerTintColor: 'blue',
-//       headerTitleStyle: {
-//         color: 'lightpink'
-//       }
-//     }
-//   }
-// )
 
 
 const LoginStack = createStackNavigator()
@@ -73,10 +56,6 @@ export const Main = () => {
   useEffect(() => {
     dispatch(fetchUsers())
   },[])
-
-  const handleLogout = () => {
-    dispatch(logoutUser())
-  }
   
   const isLogged = user.username ? true : false
 
