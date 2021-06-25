@@ -50,6 +50,7 @@ export const verifyUser = user => (dispatch,getState) => {
   }
 }
 
+
 export const logoutUser = () => ({
   type: ActionTypes.USER_LOGOUT,
   payload: {}
@@ -84,17 +85,18 @@ export const postMessageToUser = (message,user,toUser) => (dispatch) => {
     .then(response => console.log(response))
   }
   if(user.messages){
+    const previousConversation = {...user.messages.filter(m => m.from === toUser.username)[0]}
+    previousConversation.conversation.push(message)
     return fetch(baseUrl + 'users/' + user.id,{
       method: "PATCH",
       body: JSON.stringify({
         ...user,
-        messages: user.messages.filter(m => m.from === toUser.username)[0].conversation.concat(message)
+        messages: [...user.messages.filter(m => m.from !== toUser.username),{...previousConversation}]
       }),
       headers:{
         "Content-type": "application/json"
       }
     })
-    .then(response => console.log(response))
   }
   else{
     const newConversation = {
@@ -119,10 +121,18 @@ export const postMessageToUser = (message,user,toUser) => (dispatch) => {
 export const postMessage = (message,toUser) => (dispatch,getState) => {
   dispatch(postMessageToUser(message,getState().user.user,toUser))
   dispatch(postMessageToUser(message,toUser,getState().user.user))
-  .then(response => console.log(response.json()))
 }
 
-export const addMessage = (message) => dispatch => ({
+export const getMessages = (messages) => (dispatch) => {
+  dispatch(setMessages(messages))
+}
+
+export const setMessages = (messages) => ({
+  type: ActionTypes.ADD_MESSAGES,
+  payload: messages
+})
+
+export const addMessage = (message) => ({
   type: ActionTypes.ADD_MESSAGE,
   payload: message
 })

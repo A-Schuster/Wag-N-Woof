@@ -1,8 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useSelector,useDispatch } from "react-redux"
 import { FlatList } from "react-native"
 import { ListItem } from "react-native-elements"
+import { getMessages } from "../../redux/ActionCreators"
 
 const Messages = ({user,users,navigation}) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getMessages(user.messages))
+  },[])
+  const messages = useSelector(state => state.messages.messages)
 
   const latestMessage = (conversation) => {
     const sorted  = conversation.sort((a,b) => {
@@ -37,7 +44,7 @@ const Messages = ({user,users,navigation}) => {
   
   return(
     <FlatList
-      data={user.messages}
+      data={messages}
       renderItem={MessageComponent}
       keyExtractor={item => item.id.toString()}
     />

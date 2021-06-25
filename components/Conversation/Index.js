@@ -4,15 +4,16 @@ import { ScrollView, View } from 'react-native'
 import { Icon, Input } from 'react-native-elements'
 import RenderConversation from './RenderConversationComp'
 import { postMessage } from '../../redux/ActionCreators'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
 
 export const Conversation = ({route}) => {
   const {fromUser,user} = route.params
-  const [currentMessage, setCurrentMessage] = useState(null)
+  const [currentMessage, setCurrentMessage] = useState('')
   const dispatch = useDispatch()
-  const conversation = useSelector(state => state.user.user.messages.filter(m => m.from === fromUser.username)[0].conversation)
+  const conversation = useSelector(state => state.messages.messages.filter(m => m.from === fromUser.username)[0].conversation)
 
   const getFormattedDate = (date) => {
     let year = date.getFullYear();
@@ -25,6 +26,7 @@ export const Conversation = ({route}) => {
   }
 
   const sendMessage = () => {
+   if(currentMessage.length >= 1){
     const newMessage = {
       id: conversation.length + 1,
       info: {
@@ -35,16 +37,18 @@ export const Conversation = ({route}) => {
       sentBy: user.username
     }
     dispatch(postMessage(newMessage,fromUser))
+    setCurrentMessage('')
+   }
   }
 
   return(
     <View>
-      <ScrollView>
+      <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         {conversation.map(message => <RenderConversation user={user} key={message.id} item={message}/>)}
-      </ScrollView>
-      <View style={{flexDirection: "row"}} style={{justifyContent: "flex-end"}}>
-        <Input onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {<Icon onPress={sendMessage} name="message"/>} />
-      </View>
+        <View style={{flexDirection: "row"}} style={{justifyContent: "flex-end"}}>
+          <Input value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {<Icon onPress={sendMessage} name="message"/>} />
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   )
 }
