@@ -65,24 +65,61 @@ export const setCurrentUser = (user) => ({
 })
 
 export const postMessageToUser = (message,user,toUser) => (dispatch) => {
-  console.log(...user.messages.filter(message => message.from === toUser.username))
-  // return fetch(baseUrl + 'users/' + user.id + "messages/" + "from/" + toUser.id,{
-  //   method: "PATCH",
-  //   body: JSON.stringify({
-  //     conversation: [...user.messages.filter(message => message.from === toUser.username)[0].conversation, message]
-  //   }),
-  //   headers:{
-  //     "Content-type": "application/json"
-  //   }
-  // })
-  // .then(response => console.log(JSON.stringify(response)))
+  if(user.messages.filter(message => message.from === toUser.username).length <= 0){
+    const newConversation = {
+      id: user.messages.length + 1,
+      from: toUser,
+      conversation: message,
+    }
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PATCH",
+      body: JSON.stringify({
+        ...user,
+        messages: [...user.messages, user.messages.concat(newConversation)]
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+    .then(response => console.log(response))
+  }
+  if(user.messages){
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PATCH",
+      body: JSON.stringify({
+        ...user,
+        messages: user.messages.filter(m => m.from === toUser.username)[0].conversation.concat(message)
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+    .then(response => console.log(response))
+  }
+  else{
+    const newConversation = {
+      id: 1,
+      from: toUser,
+      conversation: message,
+    }
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PUT",
+      body: JSON.stringify({
+        ...user,
+        messages: [newConversation]
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+    .then(response => console.log(response))
+  }
 }
 
 export const postMessage = (message,toUser) => (dispatch,getState) => {
-  // console.log(...getState().user.user.messages)
   dispatch(postMessageToUser(message,getState().user.user,toUser))
-  .then(response => dispatch(postMessageToUser(message,getState().user.user,toUser)))
-  
+  dispatch(postMessageToUser(message,toUser,getState().user.user))
+  .then(response => console.log(response.json()))
 }
 
 export const addMessage = (message) => dispatch => ({

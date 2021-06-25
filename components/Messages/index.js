@@ -16,7 +16,6 @@ const Messages = ({user,users,navigation}) => {
         return 0
       }
     })
-    console.log(sorted)
     return sorted[0]
   }
   
@@ -29,7 +28,7 @@ const Messages = ({user,users,navigation}) => {
     const fromUser = getFromUser(item.from)
     const mostRecentMessage = latestMessage(item.conversation)
     return(
-      <ListItem onPress={() => navigation.navigate('Conversation', { fromUser: fromUser, conversation: item.conversation}) }>
+      <ListItem onPress={() => navigation.navigate('Conversation', { fromUser: fromUser, user: user, conversation: item.conversation}) }>
         <ListItem.Title>{item.from}</ListItem.Title>
         <ListItem.Subtitle>{mostRecentMessage.info.content}</ListItem.Subtitle>
       </ListItem>

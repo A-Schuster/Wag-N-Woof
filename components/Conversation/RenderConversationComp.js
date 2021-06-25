@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ListItem,Avatar } from 'react-native-elements'
 
-export const RenderConversation = ({item}) => {
+export const RenderConversation = ({item,user}) => {
   const [date, showDate] = useState(false)
   const timer = useRef(null)
 
@@ -18,7 +18,7 @@ export const RenderConversation = ({item}) => {
     }
   },[])
   
-  if(item.received){
+  if(item.sentBy !== user.username){
     return(
       <ListItem onPress={toggleDate} style={{backgroundColor: "gray"}} >
       <Avatar source={{uri: "https://randomuser.me/api/portraits/lego/6.jpg"}}/>

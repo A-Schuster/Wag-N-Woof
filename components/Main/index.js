@@ -18,10 +18,13 @@ const Tab = createMaterialTopTabNavigator()
 
 const MyTabs = ({user}) => {
   const users = useSelector(state => state.users.users)
+  const MessageCompWProps = props => (
+    <MessagesStack user={user} users={users}/>
+  )
   return(
     <Tab.Navigator>
       <Tab.Screen name="Home" component={Home}/>
-      <Tab.Screen name="Messages" component={() => <MessagesStack user={user} users={users}/>}/>
+      <Tab.Screen name="Messages" component={MessageCompWProps}/>
       <Tab.Screen name="Menu" component={Menu}/>
     </Tab.Navigator>
   )
