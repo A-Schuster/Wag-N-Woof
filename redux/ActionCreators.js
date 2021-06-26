@@ -46,9 +46,10 @@ export const verifyUser = user => (dispatch,getState) => {
   }
   else{
     const error = new Error('User was either not found or incorrect password.')
-    throw error
+    alert(error)
   }
 }
+
 
 export const logoutUser = () => ({
   type: ActionTypes.USER_LOGOUT,
@@ -62,4 +63,76 @@ export const searchingUsers = () => ({
 export const setCurrentUser = (user) => ({
   type: ActionTypes.SET_CURRENT_USER,
   payload: user
+})
+
+export const postMessageToUser = (message,user,toUser) => (dispatch) => {
+  if(user.messages.filter(message => message.from === toUser.username).length <= 0){
+    const newConversation = {
+      id: user.messages.length + 1,
+      from: toUser,
+      conversation: message,
+    }
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PATCH",
+      body: JSON.stringify({
+        ...user,
+        messages: [...user.messages, user.messages.concat(newConversation)]
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+    .then(response => console.log(response))
+  }
+  if(user.messages){
+    const previousConversation = {...user.messages.filter(m => m.from === toUser.username)[0]}
+    previousConversation.conversation.push(message)
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PATCH",
+      body: JSON.stringify({
+        ...user,
+        messages: [...user.messages.filter(m => m.from !== toUser.username),{...previousConversation}]
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+  }
+  else{
+    const newConversation = {
+      id: 1,
+      from: toUser,
+      conversation: message,
+    }
+    return fetch(baseUrl + 'users/' + user.id,{
+      method: "PUT",
+      body: JSON.stringify({
+        ...user,
+        messages: [newConversation]
+      }),
+      headers:{
+        "Content-type": "application/json"
+      }
+    })
+    .then(response => console.log(response))
+  }
+}
+
+export const postMessage = (message,toUser) => (dispatch,getState) => {
+  dispatch(postMessageToUser(message,getState().user.user,toUser))
+  dispatch(postMessageToUser(message,toUser,getState().user.user))
+}
+
+export const getMessages = (messages) => (dispatch) => {
+  dispatch(setMessages(messages))
+}
+
+export const setMessages = (messages) => ({
+  type: ActionTypes.ADD_MESSAGES,
+  payload: messages
+})
+
+export const addMessage = (message) => ({
+  type: ActionTypes.ADD_MESSAGE,
+  payload: message
 })
