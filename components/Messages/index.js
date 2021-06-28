@@ -1,14 +1,10 @@
-import React, { useEffect } from "react"
-import { useSelector,useDispatch } from "react-redux"
-import { FlatList } from "react-native"
+import React from "react"
+import { useSelector } from "react-redux"
+import { FlatList, View,Text } from "react-native"
 import { ListItem } from "react-native-elements"
-import { getMessages } from "../../redux/ActionCreators"
+import appColors from "../../shared/colors"
 
 const Messages = ({user,users,navigation}) => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(getMessages(user.messages))
-  },[])
   const messages = useSelector(state => state.messages.messages)
 
   const latestMessage = (conversation) => {
@@ -41,14 +37,26 @@ const Messages = ({user,users,navigation}) => {
       </ListItem>
     )
   }
-  
-  return(
-    <FlatList
-      data={messages}
-      renderItem={MessageComponent}
-      keyExtractor={item => item.id.toString()}
-    />
-  )
+
+  if(!messages){
+    return(
+    <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <Text style={{fontSize: 20, backgroundColor: appColors.ternary.main, padding: 10, borderRadius: 30}} >
+        No Conversations Started
+      </Text>
+    </View>
+    )
+  }
+  else{
+    return(
+      <FlatList
+        data={messages}
+        renderItem={MessageComponent}
+        keyExtractor={item => item.id.toString()}
+      />
+    )
+  }
 }
+
 
 export default Messages

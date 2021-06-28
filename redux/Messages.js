@@ -1,6 +1,6 @@
 import * as ActionTypes from "./ActionTypes"
 
-export const Messages = (state = {errMess: null, messages: []}, action) => {
+export const Messages = (state = {errMess: null, messages: null}, action) => {
   switch(action.type){
     case ActionTypes.ADD_MESSAGES:
       return {...state, errMess: null, messages: action.payload}

@@ -5,7 +5,7 @@ import Constants from "expo-constants";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack"
-import { fetchUsers, } from "../../redux/ActionCreators";
+import { fetchUsers, getMessages, } from "../../redux/ActionCreators";
 import { Home } from "../Home";
 import Login from "../Login";
 import SignUp from "../SignUp";
@@ -78,6 +78,7 @@ const LoginStackScreen = () => (
 export const Main = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user)
+  dispatch(getMessages(user.messages))
   
   useEffect(() => {
     dispatch(fetchUsers())

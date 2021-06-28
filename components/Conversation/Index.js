@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
-import { ScrollView, View } from 'react-native'
+import { View, Text } from 'react-native'
 import { Icon, Input } from 'react-native-elements'
 import RenderConversation from './RenderConversationComp'
 import { postMessage } from '../../redux/ActionCreators'
@@ -12,8 +12,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 export const Conversation = ({route}) => {
   const {fromUser,user} = route.params
   const [currentMessage, setCurrentMessage] = useState('')
+  const [errMess, setErrMess] = useState('')
+  const chatInput = useRef()
   const dispatch = useDispatch()
-  const conversation = useSelector(state => state.messages.messages.filter(m => m.from === fromUser.username)[0].conversation)
+  const messages = useSelector(state => state.messages)
+  const conversation = messages.messages.filter(m => m.from === fromUser.username)[0].conversation
 
   const getFormattedDate = (date) => {
     let year = date.getFullYear();
@@ -37,8 +40,8 @@ export const Conversation = ({route}) => {
       sentBy: user.username
     }
     dispatch(postMessage(newMessage,fromUser))
-    setCurrentMessage('')
    }
+   chatInput.current.clear()
   }
 
   return(
@@ -46,7 +49,13 @@ export const Conversation = ({route}) => {
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         {conversation.map(message => <RenderConversation user={user} key={message.id} item={message}/>)}
         <View style={{flexDirection: "row"}} style={{justifyContent: "flex-end"}}>
-          <Input value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {<Icon onPress={sendMessage} name="message"/>} />
+          <Input ref={chatInput} errorMessage={errMess} value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {
+            <View>
+              <Text>
+              {currentMessage && <Icon onPress={sendMessage} name="message"/>}
+              </Text>
+            </View>
+          } />
         </View>
       </KeyboardAwareScrollView>
     </View>

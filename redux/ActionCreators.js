@@ -65,6 +65,22 @@ export const setCurrentUser = (user) => ({
   payload: user
 })
 
+export const addUser = (user) => (dispatch,getState) => {
+  dispatch(fetchingUsers)
+  if(getState().users.users.filter(prevUser => prevUser.username === user.username).length >= 1){
+    alert("Username/Email is already in use")
+  }
+  else{
+    return fetch( baseUrl + "users",{
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-type": "application/json"
+      }
+    })
+  }
+}
+
 export const postMessageToUser = (message,user,toUser) => (dispatch) => {
   if(user.messages.filter(message => message.from === toUser.username).length <= 0){
     const newConversation = {
@@ -121,6 +137,7 @@ export const postMessageToUser = (message,user,toUser) => (dispatch) => {
 export const postMessage = (message,toUser) => (dispatch,getState) => {
   dispatch(postMessageToUser(message,getState().user.user,toUser))
   dispatch(postMessageToUser(message,toUser,getState().user.user))
+  dispatch(getMessages(getState().user.user.messages))
 }
 
 export const getMessages = (messages) => (dispatch) => {
