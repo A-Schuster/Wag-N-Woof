@@ -47,7 +47,7 @@ export const Conversation = ({route}) => {
   return(
     <View>
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
-        {conversation.map(message => <RenderConversation user={user} key={message.id} item={message}/>)}
+        {conversation.map(message => <RenderConversation user={user} fromUser={fromUser} key={message.id} item={message}/>)}
         <View style={{flexDirection: "row"}} style={{justifyContent: "flex-end"}}>
           <Input ref={chatInput} errorMessage={errMess} value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {
             <View>

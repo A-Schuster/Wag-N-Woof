@@ -66,7 +66,7 @@ export const setCurrentUser = (user) => ({
 })
 
 export const addUser = (user) => (dispatch,getState) => {
-  dispatch(fetchingUsers)
+  dispatch(fetchingUsers())
   if(getState().users.users.filter(prevUser => prevUser.username === user.username).length >= 1){
     alert("Username/Email is already in use")
   }
@@ -78,6 +78,7 @@ export const addUser = (user) => (dispatch,getState) => {
         "Content-type": "application/json"
       }
     })
+    .then(response => dispatch(fetchUsers()))
   }
 }
 

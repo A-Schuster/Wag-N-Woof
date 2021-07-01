@@ -17,15 +17,19 @@ const Login = (props) => {
       password,
       username
     })
+    dispatch(verifyUser(user))
   }
 
   const { navigate } = props.navigation;
   return(
     <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-      <View style={{padding: 20}}>
+      <View style={{padding: 20, alignItems: "center"}}>
         <TextInput autoCompleteType="username" onChangeText={setUsername} id="username" placeholder="Username" />
         <TextInput secureTextEntry={true} autoCompleteType="password" onChangeText={setPassword} id="password" placeholder="Password" />
-        <Text>Remember Me<CheckBox/></Text>
+        <View style={{flexDirection: "row", alignItems: 'center'}}>
+          <Text style={{paddingLeft: 25}}>Remember Me</Text>
+          <CheckBox/>
+        </View>
         <Text onPress={handleSubmit} style={{padding: 20}}>LOGIN</Text>
       </View>
       <Text style={{padding: 20}} onPress={() => navigate("SignUp")}>

@@ -69,7 +69,7 @@ const LoginStack = createStackNavigator()
 
 const LoginStackScreen = () => (
   <LoginStack.Navigator>
-    <LoginStack.Screen name="Login" component={Login} />
+    <LoginStack.Screen options={{headerTitleAlign: "center"}} name="Login" component={Login} />
     <LoginStack.Screen name="SignUp" component={SignUp} />
   </LoginStack.Navigator>
 )
