@@ -12,7 +12,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 export const Conversation = ({route}) => {
   const {fromUser,user} = route.params
   const [currentMessage, setCurrentMessage] = useState('')
-  const [errMess, setErrMess] = useState('')
   const chatInput = useRef()
   const dispatch = useDispatch()
   const messages = useSelector(state => state.messages)
@@ -49,7 +48,7 @@ export const Conversation = ({route}) => {
       <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
         {conversation.map(message => <RenderConversation user={user} fromUser={fromUser} key={message.id} item={message}/>)}
         <View style={{flexDirection: "row"}} style={{justifyContent: "flex-end"}}>
-          <Input ref={chatInput} errorMessage={errMess} value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {
+          <Input ref={chatInput} value={currentMessage} onChangeText={text => setCurrentMessage(text)} placeholder="New Message" rightIcon= {
             <View>
               <Text>
               {currentMessage && <Icon onPress={sendMessage} name="message"/>}

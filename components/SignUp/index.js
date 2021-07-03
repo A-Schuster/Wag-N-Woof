@@ -1,7 +1,7 @@
 import React, {useRef, useEffect} from 'react'
-import { View, StyleSheet, Keyboard, Text } from 'react-native'
+import { View, Keyboard, StyleSheet} from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Input,Icon } from 'react-native-elements'
+import { Input, Button, Icon } from 'react-native-elements'
 import appColors from '../../shared/colors'
 import { addUser } from '../../redux/ActionCreators'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
@@ -36,9 +36,10 @@ export const SignUp = () => {
           <Input ref={emailInput} onSubmitEditing={() => usernameInput.current.focus()} onChangeText={text => emailInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}} style={styles.inputs} placeholder="Email"/>
           <Input ref={usernameInput} onSubmitEditing={() => passwordInput.current.focus()} onChangeText={text => usernameInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}}  style={styles.inputs} placeholder="Username"/>
           <Input secureTextEntry={true} onSubmitEditing={() => Keyboard.dismiss()} ref={passwordInput} onChangeText={text => passwordInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}}  style={styles.inputs} placeholder="Password"/>
-          <View style={{padding: 10, width: 150, height: 50, borderRadius: 15 ,backgroundColor: appColors.ternary.light, justifyContent: 'center', alignItems: "center"}} >
-              <Text>Create Account</Text>
-              <Icon onPress={() => handleSubmit()} name="user-plus" type="font-awesome"  />
+          <View style={{backgroundColor: appColors.ternary.dark, justifyContent: 'center', alignItems: "center", borderRadius: 30}} >
+              {/* <Text>Create Account</Text>
+              <Icon onPress={() => handleSubmit()} name="user-plus" type="font-awesome"  /> */}
+              <Button onPress={() => handleSubmit()} type="clear" titleStyle={{color: appColors.secondary.light}} title="Create Account" icon={<Icon  name="user-plus" color="white" type="font-awesome"  />} />
             </View>
         </View>
     </KeyboardAwareScrollView>

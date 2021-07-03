@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Alert, Modal, StyleSheet, Text, View, Button } from "react-native";
-import { ListItem,Avatar } from 'react-native-elements'
+import { useDispatch } from 'react-redux';
+import { deleteMessage } from '../../redux/ActionCreators';
+import { Alert, StyleSheet, View} from "react-native";
+import { ListItem, Avatar, Button, Icon, Overlay } from 'react-native-elements'
 import appColors from '../../shared/colors';
+import Clipboard from '@react-native-clipboard/clipboard';
+
 
 export const RenderConversation = ({item,user,fromUser}) => {
   const [date, showDate] = useState(false)
   const timer = useRef(null)
   const [showLPModal, setShowLPModal] = useState(false)//LPModal === longPressModal
   const received = item.sentBy !== user.username
+  const dispatch = useDispatch()
 
   const toggleDate = () => {
     showDate(!date)
@@ -23,33 +28,49 @@ export const RenderConversation = ({item,user,fromUser}) => {
   },[])
 
   const handleDelete = () => {
-    console.log(`Id: ${item.id} From: ${fromUser.username} User: ${user.username}`)
-    // dispatch(deleteMessage(item.id)
+    Alert.alert(
+      "Delete",
+      "Are you sure you want to delete this message?",
+      [
+        {
+          text: "Delete",
+          onPress: () => dispatch(deleteMessage(item.id,user,fromUser)),
+          style: "destructive"
+        }
+      ],
+      {
+        cancelable: true,
+        onDismiss: () => setShowLPModal(!showLPModal)
+      }
+    )
+  }
+
+  const handleCopy = () => {
+    console.log("Copied")
   }
   
   
   return(
     <View>
       <View>
-        <Modal
-          animationType="slide"
-          visible={showLPModal}
-          transparent={true}
+        <Overlay
+          animationType="fade"
+          isVisible={showLPModal}
           onRequestClose={() => {
             setShowLPModal(!showLPModal);
           }}
+          onBackdropPress={() => setShowLPModal(!showLPModal)}
+          overlayStyle={{height: 200, backgroundColor: appColors.main.main, width: 200, borderRadius: 15}}
         >
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={{margin: 10}}>
-                <Button title="Copy" color={appColors.secondary.light} />
-              </View>
-              <View style={{margin: 10}}>
-                <Button onPress={handleDelete} title="Delete" color={appColors.secondary.light} />
-              </View>
+            <View style={{margin: 10}}>
+            <Button onPress={handleCopy} buttonStyle={{backgroundColor: appColors.secondary.dark}} titleStyle={{color:"darkgray"}} iconRight icon={<Icon color={appColors.ternary.main} name="copy-sharp" type="ionicon" />} title="Copy" color={appColors.secondary.light} />
+            </View>
+            <View style={{margin: 10}}>
+              <Button onPress={handleDelete} buttonStyle={{backgroundColor: appColors.secondary.dark}} titleStyle={{color:"darkgray"}} iconRight icon={<Icon color={appColors.ternary.main} name="trash-sharp" type="ionicon" />} title="Delete" color={appColors.secondary.light} />
             </View>
           </View>
-        </Modal>
+        </Overlay>
       </View>
       <ListItem onLongPress={() => setShowLPModal(!showLPModal)} onPress={toggleDate} style={{backgroundColor: "gray"}} >
       {received && <Avatar source={{uri: "https://randomuser.me/api/portraits/lego/6.jpg"}}/>}
@@ -68,11 +89,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: appColors.main.main,
     borderRadius: 20,
     padding: 35,
     width: 200,
@@ -85,6 +105,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
+  },
+  modalButton: {
+
   }
 });
 
