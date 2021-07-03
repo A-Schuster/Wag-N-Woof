@@ -81,7 +81,7 @@ export const addUser = (user) => (dispatch,getState) => {
   }
 }
 
-export const postMessageToUser = (message,user,toUser) => {
+export const postMessageToUser = (message,user,toUser) => () => {
   if(user.messages.filter(message => message.from === toUser.username).length <= 0){
     const newConversation = {
       id: user.messages.length + 1,
@@ -150,24 +150,23 @@ export const addMessage = (message) => ({
   payload: message
 })
 
-export const deleteMessage = (messageId,user,toUser) => dispatch => {
+export const deleteMessage = (messageId,user,toUser) => (dispatch,getState) => {
   const messages = user.messages.filter(message => message.from === toUser.username)[0]
-  const updatedMessages = {
-    ...messages,
-  }
-  // dispatch(setMessages(updatedMessages))
+  messages.conversation = messages.conversation.filter(message => message.id !== messageId)
+  const updatedMessages = [...user.messages.filter(messages => messages.from !== toUser.username),messages]
+  dispatch(setMessages(updatedMessages))
+  dispatch(getMessages(getState().user.user.messages))
   
-  //   return fetch(baseUrl + "users/" + user.id, {
-  //     method: "PATCH",
-  //     body: JSON.stringify({
-  //       ...user,
-  //       messages: updatedMessages
-  //     }),
-  //     headers:{
-  //       "Content-type": "application/json"
-  //     }
-  //   })
-  console.log(updatedMessages)
+  return fetch(baseUrl + "users/" + user.id, {
+    method: "PATCH",
+    body: JSON.stringify({
+      ...user,
+      messages: updatedMessages
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
 }
 
 export const setMessages = (messages) => ({

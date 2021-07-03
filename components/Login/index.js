@@ -4,7 +4,6 @@ import { View, Text } from "react-native"
 import { TextInput } from "react-native-gesture-handler";
 import CheckBox from '@react-native-community/checkbox';
 import { verifyUser } from "../../redux/ActionCreators";
-import { NetworkInfo } from "react-native-network-info"
 
 const Login = (props) => {
   const [password, setPassword] = useState(null)
