@@ -13,6 +13,7 @@ import Messages from "../Messages";
 import Menu from "../Menu"
 import Conversation from "../Conversation/Index";
 import AccountSettings from "../Account";
+import { Search } from "../Search";
 
 
 const Tab = createMaterialTopTabNavigator()
@@ -30,6 +31,7 @@ const MyTabs = ({user}) => {
     <Tab.Navigator>
       <Tab.Screen name="Home" component={Home}/>
       <Tab.Screen name="Messages" component={MessageCompWProps}/>
+      <Tab.Screen  name="Search" component={SearchStack} />
       <Tab.Screen name="Menu" component={MenuStack}/>
     </Tab.Navigator>
   )
@@ -40,6 +42,14 @@ const MenuStack = () => {
     <Stack.Navigator>
       <Stack.Screen options={{headerShown: false}} name={"Menu"} component={Menu}/>
       <Stack.Screen name={"AccountSettings"} component={AccountSettings}/>
+    </Stack.Navigator>
+  )
+}
+
+const SearchStack = () => {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen options={{headerShown: false}}  name={"Search"} component={Search} />
     </Stack.Navigator>
   )
 }

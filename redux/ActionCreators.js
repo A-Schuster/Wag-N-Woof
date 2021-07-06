@@ -154,7 +154,7 @@ export const deleteMessage = (messageId,user,toUser) => (dispatch,getState) => {
   const messages = user.messages.filter(message => message.from === toUser.username)[0]
   messages.conversation = messages.conversation.filter(message => message.id !== messageId)
   const updatedMessages = [...user.messages.filter(messages => messages.from !== toUser.username),messages]
-  dispatch(setMessages(updatedMessages))
+  dispatch(deleteMessages(updatedMessages))
   dispatch(getMessages(getState().user.user.messages))
   
   return fetch(baseUrl + "users/" + user.id, {
@@ -169,7 +169,12 @@ export const deleteMessage = (messageId,user,toUser) => (dispatch,getState) => {
   })
 }
 
-export const setMessages = (messages) => ({
+export const deleteMessages = (messages) => ({
   type: ActionTypes.DELETE_MESSAGE,
   payload: messages
 })
+
+
+export const acceptRequest = (user,fromUser) => (dispatch,getState) => {
+  const updatedUserFriends = user.friends.received.filter()
+}

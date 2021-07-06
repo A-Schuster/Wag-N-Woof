@@ -10,7 +10,7 @@ export const Users = (state = {errMess: null, isLoading: true, users: []}, actio
       return {...state, isLoading: false, users: action.payload, errMess: null}
     case ActionTypes.ADD_USER:
       const newUser = action.payload
-      newUser.id = state.users.length
+      newUser.id = state.users.length + 1
       return {...state, isLoading: false, users: state.users.concat(newUser)}
     default:
       return state;
