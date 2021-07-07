@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { useDispatch,useSelector } from "react-redux";
-import { View, Platform, Text } from "react-native"
+import { View, Platform } from "react-native"
 import Constants from "expo-constants";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,25 +13,26 @@ import Messages from "../Messages";
 import Menu from "../Menu"
 import Conversation from "../Conversation/Index";
 import AccountSettings from "../Account";
-import { Search } from "../Search";
+import { Friends } from "../Friends";
 
 
 const Tab = createMaterialTopTabNavigator()
 
-const MyTabs = ({user}) => {
+const MyTabs = (props) => {
   const users = useSelector(state => state.users.users)
+  const navigationRef = useRef(null)
   //"MessageCompWProps is for the following error message"
   //Looks like you're passing an inline function for 'component' prop for the screen 'Messages' (e.g. component={() => <SomeComponent />}). 
   // Passing an inline function will cause the component state to be lost on re-render and cause perf 
   // issues since it's re-created every render. You can pass the function as children to 'Screen' instead to achieve the desired behaviour.
-  const MessageCompWProps = props => (
-    <MessagesStack user={user} users={users}/>
+  const MessageCompWProps = () => (
+    <MessagesStack user={props.user} users={users}/>
   )
   return(
-    <Tab.Navigator>
+    <Tab.Navigator ref={navigationRef}>
       <Tab.Screen name="Home" component={Home}/>
       <Tab.Screen name="Messages" component={MessageCompWProps}/>
-      <Tab.Screen  name="Search" component={SearchStack} />
+      <Tab.Screen name="Friends" component={FriendsStack} />
       <Tab.Screen name="Menu" component={MenuStack}/>
     </Tab.Navigator>
   )
@@ -40,16 +41,18 @@ const MyTabs = ({user}) => {
 const MenuStack = () => {
   return(
     <Stack.Navigator>
-      <Stack.Screen options={{headerShown: false}} name={"Menu"} component={Menu}/>
+      <Stack.Screen name={"Menu"} component={Menu}/>
       <Stack.Screen name={"AccountSettings"} component={AccountSettings}/>
     </Stack.Navigator>
   )
 }
 
-const SearchStack = () => {
+const FriendsStack = ({navigation}) => {
+  console.log(navigation)
   return(
-    <Stack.Navigator>
-      <Stack.Screen options={{headerShown: false}}  name={"Search"} component={Search} />
+    <Stack.Navigator >
+      <Stack.Screen name={"Friends"} component={Friends} />
+      <Stack.Screen name={"Conversation"} options={({ route }) => ({ title: route.params.fromUser.username.toUpperCase()})} component={Conversation} />
     </Stack.Navigator>
   )
 }

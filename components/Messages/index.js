@@ -31,7 +31,7 @@ const Messages = ({user,users,navigation}) => {
     const fromUser = getFromUser(item.from)
     const mostRecentMessage = latestMessage(item.conversation)
     return(
-      <ListItem onPress={() => navigation.navigate('Conversation', { fromUser: fromUser, user: user, conversation: item.conversation}) }>
+      <ListItem onPress={() => navigation.navigate('Conversation', { fromUser: fromUser, user: user}) }>
         <ListItem.Title>{item.from}</ListItem.Title>
         <ListItem.Subtitle>{mostRecentMessage ? mostRecentMessage.info.content: "No messages to this user yet."}</ListItem.Subtitle>
       </ListItem>

@@ -23,7 +23,7 @@ export const SignUp = () => {
       lastName: lastInput.current.value,
       email: emailInput.current.value,
       username: usernameInput.current.value,
-      password: passwordInput.current.value
+      password: passwordInput.current.value,
     }
     dispatch(addUser(newUser))
   }
@@ -37,10 +37,8 @@ export const SignUp = () => {
           <Input ref={usernameInput} onSubmitEditing={() => passwordInput.current.focus()} onChangeText={text => usernameInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}}  style={styles.inputs} placeholder="Username"/>
           <Input secureTextEntry={true} onSubmitEditing={() => Keyboard.dismiss()} ref={passwordInput} onChangeText={text => passwordInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}}  style={styles.inputs} placeholder="Password"/>
           <View style={{backgroundColor: appColors.ternary.dark, justifyContent: 'center', alignItems: "center", borderRadius: 30}} >
-              {/* <Text>Create Account</Text>
-              <Icon onPress={() => handleSubmit()} name="user-plus" type="font-awesome"  /> */}
-              <Button onPress={() => handleSubmit()} type="clear" titleStyle={{color: appColors.secondary.light}} title="Create Account" icon={<Icon  name="user-plus" color="white" type="font-awesome"  />} />
-            </View>
+            <Button onPress={() => handleSubmit()} type="clear" titleStyle={{color: appColors.secondary.light}} title="Create Account" icon={<Icon  name="user-plus" color="white" type="font-awesome"  />} />
+          </View>
         </View>
     </KeyboardAwareScrollView>
   )

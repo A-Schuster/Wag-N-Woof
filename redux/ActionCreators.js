@@ -1,4 +1,6 @@
+import { actions } from 'react-redux-form';
 import { baseUrl } from '../shared/baseUrl';
+import getFormattedDate from '../shared/formattedDate';
 import * as ActionTypes from './ActionTypes';
 
 export const fetchingUsers = () => ({
@@ -174,7 +176,94 @@ export const deleteMessages = (messages) => ({
   payload: messages
 })
 
+export const acceptRequest = (user,fromUser) => (dispatch) => {
+  dispatch(putNewFriend(fromUser,user))
+  dispatch(putNewFriend(user,fromUser))
+  .then(response => response.json())
+  .then(user => dispatch(setCurrentUser(user)))
+}
 
-export const acceptRequest = (user,fromUser) => (dispatch,getState) => {
-  const updatedUserFriends = user.friends.received.filter()
+
+export const putNewFriend = (user,fromUser) => () => {
+  const newFriend = {
+    id: user.friends.length + 1,
+    date: getFormattedDate(new Date()),
+    username: fromUser.username
+  }
+  return fetch(baseUrl + "users/" + user.id,{
+    method: "PUT",
+    body: JSON.stringify({
+      ...user,
+      friends: user.friends.concat(newFriend),
+      friendRequests: user.friendRequests.filter(fr => fr.username !== fromUser.username)
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
+}
+
+export const removeFriend = (user,fromUser) => (dispatch) => {
+  dispatch(deleteFriend(fromUser,user))
+  dispatch(deleteFriend(user,fromUser))
+  .then(response => response.json())
+  .then(user => dispatch(setCurrentUser(user)))
+}
+
+export const deleteFriend = (user,fromUser) => () => {
+  return fetch(baseUrl + "users/" + user.id,{
+    method: "PUT",
+    body: JSON.stringify({
+      ...user,
+      friends: user.friends.filter(friend => friend.username !== fromUser.username)
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
+}
+
+export const sendRequest = (user,toUser) => (dispatch) => {
+  dispatch(postRequest(toUser,user))
+  dispatch(postRequest(user,toUser))
+  .then(response => response.json())
+  .then(user => dispatch(setCurrentUser(user)))
+}
+
+export const postRequest = (user,toUser) => (dispatch,getState) => {
+  const newRequest = {
+    id: user.friendRequests.length + 1,
+    username: toUser.username,
+    received: getState().user.user.username === user.username ? false : true
+  }
+  return fetch(baseUrl + "users/" + user.id,{
+    method: "PUT",
+    body: JSON.stringify({
+      ...user,
+      friendRequests: user.friendRequests.concat(newRequest)
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
+}
+
+export const cancelRequest = (user,toUser) => (dispatch) => {
+  dispatch(deleteRequest(toUser,user))
+  dispatch(deleteRequest(user,toUser))
+  .then(response => response.json())
+  .then(user => dispatch(setCurrentUser(user)))
+}
+
+export const deleteRequest = (user,toUser) => () => {
+  return fetch(baseUrl + "users/" + user.id,{
+    method: "PUT",
+    body: JSON.stringify({
+      ...user,
+      friendRequests: user.friendRequests.filter(fr => fr.username !== toUser.username)
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
 }
