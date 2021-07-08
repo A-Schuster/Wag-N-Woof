@@ -4,7 +4,6 @@ import { deleteMessage } from '../../redux/ActionCreators';
 import { Alert, StyleSheet, View} from "react-native";
 import { ListItem, Avatar, Button, Icon, Overlay } from 'react-native-elements'
 import appColors from '../../shared/colors';
-import Clipboard from '@react-native-clipboard/clipboard';
 
 
 export const RenderConversation = ({item,user,fromUser}) => {

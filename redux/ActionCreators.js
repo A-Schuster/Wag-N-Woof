@@ -254,6 +254,9 @@ export const postNewConvo = (user,fromUser,navigation) => (dispatch) => {
   dispatch(postNewConvoToUser(fromUser,user))
   dispatch(postNewConvoToUser(user,fromUser))
   .then(res => res.json())
-  .then(user => dispatch(getMessages(user.messages)))
+  .then(user => {
+    dispatch(getMessages(user.messages))
+    dispatch(setCurrentUser(user))
+  })
   .then(() => navigation.navigate('Conversation', { fromUser: fromUser, user: user}))  
 }

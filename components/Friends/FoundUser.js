@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/core";
 import { ListItem, Avatar, Button, Icon } from 'react-native-elements';
 import { acceptRequest, cancelRequest, postNewConvo, removeFriend, sendRequest } from "../../redux/ActionCreators";
 import appColors from "../../shared/colors";
+import { baseUrl } from "../../shared/baseUrl";
 
 export const FoundUser = ({found}) => {
   const user = useSelector(state => state.user.user)
@@ -54,7 +55,10 @@ export const FoundUser = ({found}) => {
       navigation.navigate('Conversation', { fromUser: found, user: user})
     }
     else if(!previousConversation){
-      dispatch(postNewConvo(user,found,navigation))
+     return fetch(`${baseUrl}users/${found.id}`)
+     .then(res => res.json())
+     .then(found => dispatch(postNewConvo(user,found,navigation)))
+      
     }
   }
 

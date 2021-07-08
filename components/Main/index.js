@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { useDispatch,useSelector } from "react-redux";
 import { View, Platform } from "react-native"
 import Constants from "expo-constants";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack"
-import { fetchUsers, getMessages, } from "../../redux/ActionCreators";
+import { getMessages } from "../../redux/ActionCreators";
 import { Home } from "../Home";
 import Login from "../Login";
 import SignUp from "../SignUp";
@@ -13,14 +13,14 @@ import Messages from "../Messages";
 import Menu from "../Menu"
 import Conversation from "../Conversation/Index";
 import AccountSettings from "../Account";
-import { Friends } from "../Friends";
+import Friends from "../Friends";
+import Requests from "../Friends/RequestComponent";
 
 
 const Tab = createMaterialTopTabNavigator()
 
 const MyTabs = (props) => {
   const users = useSelector(state => state.users.users)
-  const navigationRef = useRef(null)
   //"MessageCompWProps is for the following error message"
   //Looks like you're passing an inline function for 'component' prop for the screen 'Messages' (e.g. component={() => <SomeComponent />}). 
   // Passing an inline function will cause the component state to be lost on re-render and cause perf 
@@ -29,7 +29,7 @@ const MyTabs = (props) => {
     <MessagesStack user={props.user} users={users}/>
   )
   return(
-    <Tab.Navigator ref={navigationRef}>
+    <Tab.Navigator>
       <Tab.Screen name="Home" component={Home}/>
       <Tab.Screen name="Messages" component={MessageCompWProps}/>
       <Tab.Screen name="Friends" component={FriendsStack} />
@@ -47,12 +47,12 @@ const MenuStack = () => {
   )
 }
 
-const FriendsStack = ({navigation}) => {
-  console.log(navigation)
+const FriendsStack = () => {
   return(
     <Stack.Navigator >
-      <Stack.Screen name={"Friends"} component={Friends} />
+      <Stack.Screen options={{headerShown: false}} name={"Friends"} component={Friends} />
       <Stack.Screen name={"Conversation"} options={({ route }) => ({ title: route.params.fromUser.username.toUpperCase()})} component={Conversation} />
+      <Stack.Screen name={"Requests"} component={Requests} /> 
     </Stack.Navigator>
   )
 }
