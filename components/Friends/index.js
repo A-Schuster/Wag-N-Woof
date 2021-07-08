@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View } from 'react-native'
+import { View,Text } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 import { useSelector } from 'react-redux'
 import { baseUrl } from '../../shared/baseUrl'
@@ -36,6 +36,7 @@ export const Friends = () => {
       <SearchBar lightTheme value={search} placeholder="Search..." onClear={() => setFound([])} onChangeText={handleSearch} />
       {search.length >= 1 && found.map(item => <FoundComp key={item.id + item.username} found={item}/>)}
       {!search && friends.map(friend => <FoundComp key={friend.id + friend.username} found={friend} />)}
+      {!search && !friends && <Text>Get Started Making Friends!</Text>}
     </View>
   )
 }

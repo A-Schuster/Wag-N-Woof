@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View,Text, StyleSheet } from 'react-native'
 import { useNavigation } from "@react-navigation/core";
 import { ListItem, Avatar, Button, Icon } from 'react-native-elements';
-import { acceptRequest, cancelRequest, removeFriend, sendRequest } from "../../redux/ActionCreators";
+import { acceptRequest, cancelRequest, postNewConvo, removeFriend, sendRequest } from "../../redux/ActionCreators";
 import appColors from "../../shared/colors";
 
 export const FoundUser = ({found}) => {
@@ -30,14 +30,13 @@ export const FoundUser = ({found}) => {
     else if(showRemove){
       return (
         <View style={{flexDirection: "row", alignItems: "center"}}>
-          <View onTouchEnd={() => navigation.navigate('Conversation', { fromUser: found, user: user})} style={{paddingRight: 20}}>
-            {/* <Icon onPress={() => null} name="comment" type="font-awesome-5"/>
-            <Text onPress={() => null}>Conversation</Text> */}
+          <View style={{paddingRight: 20}}>
             <Button 
               title="Messages" 
               buttonStyle={{backgroundColor: "rgba(0,0,0,0)"}} 
               titleStyle={{color: appColors.main.main, fontWeight: "bold"}}
               icon={{name: "comment", type: "font-awesome-5"}}
+              onPress={() => gotoConversation()}
             />
           </View>
           <Button buttonStyle={{backgroundColor: appColors.secondary.light}} style={styles.button} onPress={handleRemove} icon={{name: "user-slash", type: "font-awesome-5"}} />
@@ -49,6 +48,15 @@ export const FoundUser = ({found}) => {
     }
   }
   
+  const gotoConversation = async () => {
+    const previousConversation = user.messages.filter(message => message.from === found.username).length >= 1
+    if(previousConversation){
+      navigation.navigate('Conversation', { fromUser: found, user: user})
+    }
+    else if(!previousConversation){
+      dispatch(postNewConvo(user,found,navigation))
+    }
+  }
 
   const handleAdd = () => {
     dispatch(sendRequest(user,found))

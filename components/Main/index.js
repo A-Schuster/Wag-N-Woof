@@ -93,10 +93,6 @@ export const Main = () => {
   const user = useSelector(state => state.user.user)
   dispatch(getMessages(user.messages))
   
-  useEffect(() => {
-    dispatch(fetchUsers())
-  },[])
-  
   const isLogged = user.username ? true : false
 
   return(

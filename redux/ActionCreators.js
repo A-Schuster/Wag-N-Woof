@@ -84,26 +84,8 @@ export const addUser = (user) => (dispatch,getState) => {
 }
 
 export const postMessageToUser = (message,user,toUser) => () => {
-  if(user.messages.filter(message => message.from === toUser.username).length <= 0){
-    const newConversation = {
-      id: user.messages.length + 1,
-      from: toUser,
-      conversation: message,
-    }
-    return fetch(baseUrl + 'users/' + user.id,{
-      method: "PATCH",
-      body: JSON.stringify({
-        ...user,
-        messages: [...user.messages, user.messages.concat(newConversation)]
-      }),
-      headers:{
-        "Content-type": "application/json"
-      }
-    })
-    .then(response => console.log(response))
-  }
-  if(user.messages){
-    const previousConversation = {...user.messages.filter(m => m.from === toUser.username)[0]}
+  const previousConversation = {...user.messages.filter(m => m.from === toUser.username)[0]}
+  if(user.messages.length >= 1){
     previousConversation.conversation.push(message)
     return fetch(baseUrl + 'users/' + user.id,{
       method: "PATCH",
@@ -115,24 +97,6 @@ export const postMessageToUser = (message,user,toUser) => () => {
         "Content-type": "application/json"
       }
     })
-  }
-  else{
-    const newConversation = {
-      id: 1,
-      from: toUser,
-      conversation: message,
-    }
-    return fetch(baseUrl + 'users/' + user.id,{
-      method: "PUT",
-      body: JSON.stringify({
-        ...user,
-        messages: [newConversation]
-      }),
-      headers:{
-        "Content-type": "application/json"
-      }
-    })
-    .then(response => console.log(response))
   }
 }
 
@@ -266,4 +230,30 @@ export const deleteRequest = (user,toUser) => () => {
       "Content-type": "application/json"
     }
   })
+}
+
+export const postNewConvoToUser = (user,fromUser) => (dispatch) => {
+  const newConversation = {
+    id: user.messages.length + 1,
+    from: fromUser.username,
+    conversation: [],
+  }
+  return fetch(baseUrl + 'users/' + user.id,{
+    method: "PUT",
+    body: JSON.stringify({
+      ...user,
+      messages: user.messages.concat(newConversation)
+    }),
+    headers:{
+      "Content-type": "application/json"
+    }
+  })
+}
+
+export const postNewConvo = (user,fromUser,navigation) => (dispatch) => {
+  dispatch(postNewConvoToUser(fromUser,user))
+  dispatch(postNewConvoToUser(user,fromUser))
+  .then(res => res.json())
+  .then(user => dispatch(getMessages(user.messages)))
+  .then(() => navigation.navigate('Conversation', { fromUser: fromUser, user: user}))  
 }

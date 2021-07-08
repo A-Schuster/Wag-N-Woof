@@ -1,15 +1,19 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useDispatch } from "react-redux";
 import { View, Text } from "react-native"
 import { TextInput } from "react-native-gesture-handler";
 import CheckBox from '@react-native-community/checkbox';
-import { verifyUser } from "../../redux/ActionCreators";
+import { fetchUsers, verifyUser } from "../../redux/ActionCreators";
 
 const Login = (props) => {
   const [password, setPassword] = useState(null)
   const [username, setUsername] = useState(null)
   const dispatch = useDispatch()
 
+  
+  useEffect(() => {
+    dispatch(fetchUsers())
+  },[])
 
   const handleSubmit = () => {
     const user = ({

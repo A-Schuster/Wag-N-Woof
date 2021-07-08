@@ -9,7 +9,7 @@ import getFormattedDate from '../../shared/formattedDate'
 
 
 
-export const Conversation = ({route,navigation}) => {
+export const Conversation = ({route}) => {
   const {fromUser,user} = route.params
   const [currentMessage, setCurrentMessage] = useState('')
   const chatInput = useRef()

@@ -24,6 +24,10 @@ export const SignUp = () => {
       email: emailInput.current.value,
       username: usernameInput.current.value,
       password: passwordInput.current.value,
+      friends: [],
+      friendRequests: [],
+      dogs: [],
+      messages: []
     }
     dispatch(addUser(newUser))
   }
@@ -31,7 +35,7 @@ export const SignUp = () => {
   return(
     <KeyboardAwareScrollView >
         <View style={styles.view}>
-          <Input ref={firstInput} onSubmitEditing={() => lastInput.current.focus()} inputContainerStyle={{borderBottomWidth: 0}} style={styles.inputs} placeholder="First Name"/>
+          <Input ref={firstInput} onSubmitEditing={() => lastInput.current.focus()} onChangeText={text => firstInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}} style={styles.inputs} placeholder="First Name"/>
           <Input ref={lastInput} onSubmitEditing={() => emailInput.current.focus()} onChangeText={text => lastInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}} style={styles.inputs} placeholder="Last Name"/>
           <Input ref={emailInput} onSubmitEditing={() => usernameInput.current.focus()} onChangeText={text => emailInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}} style={styles.inputs} placeholder="Email"/>
           <Input ref={usernameInput} onSubmitEditing={() => passwordInput.current.focus()} onChangeText={text => usernameInput.current.value = text} inputContainerStyle={{borderBottomWidth: 0}}  style={styles.inputs} placeholder="Username"/>
